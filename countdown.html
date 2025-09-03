@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VJ875 다낭 출발</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+        #countdown {
+            font-size: 3em;
+            padding: 20px 40px;
+            border: 3px solid #fff;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+    <h1>VJ875 다낭 출발</h1>
+    <div id="countdown">--:--:--</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countdownEl = document.getElementById('countdown');
+            
+            // 2025-09-03 22:45:00 한국시간(KST, UTC+9)
+            // iOS에서 직접 파싱 안되는 문제를 해결하려면 Date.UTC 사용
+            const flightTime = Date.UTC(2025, 8, 3, 13, 45, 0); // 8월 = 0-based, UTC 시간으로 변환
+            
+            function updateCountdown() {
+                const now = new Date();
+                const nowUtc = Date.UTC(
+                    now.getUTCFullYear(),
+                    now.getUTCMonth(),
+                    now.getUTCDate(),
+                    now.getUTCHours(),
+                    now.getUTCMinutes(),
+                    now.getUTCSeconds()
+                );
+
+                let diff = flightTime - nowUtc;
+
+                if (diff <= 0) {
+                    countdownEl.innerHTML = "출발 완료!";
+                    clearInterval(timer);
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                countdownEl.innerHTML = `${hours}시간 ${minutes}분 ${seconds}초`;
+            }
+
+            updateCountdown(); // 즉시 표시
+            const timer = setInterval(updateCountdown, 1000);
+        });
+    </script>
+</body>
+</html>
